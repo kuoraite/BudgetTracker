@@ -5,6 +5,10 @@
 }
 
 <form method="post" asp-controller="categories" asp-action="@action">
+    @if (action?.ToLower() == "edit")
+    {
+        <input type="hidden" asp-for="CategoryId" />
+    }
 
     <div class="text-danger" asp-validation-summary="All"></div>
 

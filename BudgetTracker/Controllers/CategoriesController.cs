@@ -43,24 +43,30 @@ namespace BudgetTracker.Controllers
         }
 
         // GET: CategoriesController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            ViewBag.Action = "edit";
+
+            var category = context.Categories.FirstOrDefault(x => x.CategoryId == id);
+
+            if(category == null) return NotFound();
+
+            return View(category);
         }
 
         // POST: CategoriesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Category category)
         {
-            try
+            if (ModelState.IsValid)
             {
+                context.Categories.Update(category);
+                context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+
+            return View(category);
         }
 
         // GET: CategoriesController/Delete/5

@@ -18,7 +18,7 @@
             <tr>
                 <td>@category.Name</td>
                 <td>@category.Description</td>
-                <td></td>
+                <td><a class="btn btn-link" asp-controller="categories" asp-action="edit" asp-route-id="@category.CategoryId">Edit</a></td>
             </tr>
         }
     </table>
