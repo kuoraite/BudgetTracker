@@ -1,0 +1,31 @@
+﻿@model List<Category>
+
+@{
+    ViewData["Title"] = "Categories Page";
+}
+
+@if (Model != null && Model.Count >= 0)
+{
+    <table class="table table-striped">
+        <tr>
+            <th>Category name</th>
+            <th>Description</th>
+            <th></th>
+        </tr>
+
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.Name</td>
+                <td>@category.Description</td>
+                <td></td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <h5>No categories have been created yet.</h5>
+}
+
+<a class="btn btn-primary" href="/categories/create">Create new</a>

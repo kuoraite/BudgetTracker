@@ -1,0 +1,27 @@
+﻿@model Category
+
+@{
+    string action = ViewBag.Action ?? string.Empty;
+}
+
+<form method="post" asp-controller="categories" asp-action="@action">
+
+    <div class="text-danger" asp-validation-summary="All"></div>
+
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label>Category name</label>
+            <input type="text" class="form-control" asp-for="Name" />
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+    <div class="form-group">
+        <label>Description</label>
+        <textarea class="form-control form-control-lg" asp-for="Description" rows="3"></textarea>
+    </div>
+    </div>
+
+    <br />
+    <input type="submit" class="btn btn-primary" value="save" />
+</form>
