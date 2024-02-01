@@ -6,7 +6,8 @@ namespace BudgetTracker.Models
     {
         [Required]
         public int BudgetId { get; set; }
-        public string? Name { get; set; } 
-        public decimal TotalAmount { get; set; } 
+        [Required]
+        public string Name { get; set; } 
+        public decimal? TotalAmount { get; set; } 
     }
 }

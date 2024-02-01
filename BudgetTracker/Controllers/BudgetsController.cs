@@ -42,6 +42,10 @@ namespace BudgetTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(budget.TotalAmount == null)
+                {
+                    budget.TotalAmount = 0;
+                }
                 context.Budgets.Add(budget);
                 context.SaveChanges();
 
@@ -68,6 +72,10 @@ namespace BudgetTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (budget.TotalAmount == null)
+                {
+                    budget.TotalAmount = 0;
+                }
                 context.Budgets.Update(budget);
                 context.SaveChanges();
 
