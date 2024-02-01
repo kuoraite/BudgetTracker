@@ -21,7 +21,7 @@
                 <td>@budget.TotalAmount</td>
                 <td><a class="btn btn-link" asp-controller="budgets" asp-action="details" asp-route-id="@budget.BudgetId">View</a></td>
                 <td><a class="btn btn-link" asp-controller="budgets" asp-action="edit" asp-route-id="@budget.BudgetId">Edit</a></td>
-                <td><a class="btn btn-link" asp-controller="budgets" asp-action="delete" asp-route-id="@budget.BudgetId">Delete</a></td>
+                <td><a class="btn btn-link" asp-controller="budgets" asp-action="delete" asp-route-id="@budget.BudgetId" onclick="return confirmDelete()">Delete</a></td>
             </tr>
         }
     </table>
@@ -32,3 +32,11 @@ else
 }
 
 <a class="btn btn-primary" href="/budgets/create">Create a budget</a>
+
+@section Scripts{
+    <script>
+        function confirmDelete(){
+            return confirm("Are you sure you want to delete this budget?")
+        }
+    </script>
+}

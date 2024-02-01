@@ -1,6 +1,7 @@
 ﻿using BudgetTracker.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BudgetTracker.Controllers
@@ -87,22 +88,14 @@ namespace BudgetTracker.Controllers
         // GET: BudgetsController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
-        }
+            var budget = context.Budgets.Find(id);
 
-        // POST: BudgetsController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            if (budget == null) return NotFound();
+
+            context.Budgets.Remove(budget);
+            context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
