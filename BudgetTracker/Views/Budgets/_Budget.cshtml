@@ -5,7 +5,11 @@
 }
 
 <form method="post" asp-controller="budgets" asp-action="@action">
-    visu pirma darau create
+    @if (action?.ToLower() == "edit")
+    {
+        <input type="hidden" asp-for="BudgetId"/>
+    }
+
     <div class="text-danger" asp-validation-summary="All"></div>
 
     <div class="col-lg-3">

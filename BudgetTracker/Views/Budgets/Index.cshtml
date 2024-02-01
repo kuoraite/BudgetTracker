@@ -19,9 +19,9 @@
             <tr>
                 <td>@budget.Name</td>
                 <td>@budget.TotalAmount</td>
-                <td><a class="btn btn-link" asp-controller="budget" asp-action="details" asp-route-id="@budget.BudgetId">View</a></td>
-                <td><a class="btn btn-link" asp-controller="budget" asp-action="edit" asp-route-id="@budget.BudgetId">Edit</a></td>
-                <td><a class="btn btn-link" asp-controller="budget" asp-action="delete" asp-route-id="@budget.BudgetId">Delete</a></td>
+                <td><a class="btn btn-link" asp-controller="budgets" asp-action="details" asp-route-id="@budget.BudgetId">View</a></td>
+                <td><a class="btn btn-link" asp-controller="budgets" asp-action="edit" asp-route-id="@budget.BudgetId">Edit</a></td>
+                <td><a class="btn btn-link" asp-controller="budgets" asp-action="delete" asp-route-id="@budget.BudgetId">Delete</a></td>
             </tr>
         }
     </table>

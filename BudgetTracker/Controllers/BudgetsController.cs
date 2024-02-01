@@ -51,24 +51,29 @@ namespace BudgetTracker.Controllers
         }
 
         // GET: BudgetsController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            ViewBag.Action = "edit";
+
+            var budget = context.Budgets.FirstOrDefault(x => x.BudgetId == id);
+            if (budget == null) return NotFound();
+
+            return View(budget);
         }
 
         // POST: BudgetsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Budget budget)
         {
-            try
+            if (ModelState.IsValid)
             {
+                context.Budgets.Update(budget);
+                context.SaveChanges();
+
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(budget);
         }
 
         // GET: BudgetsController/Delete/5
