@@ -1,0 +1,28 @@
+﻿@model Budget
+
+@{
+    string action = ViewBag.Action ?? string.Empty;
+}
+
+<form method="post" asp-controller="budgets" asp-action="@action">
+    visu pirma darau create
+    <div class="text-danger" asp-validation-summary="All"></div>
+
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label>Budget name</label>
+            <input type="text" class="form-control" asp-for="Name" />
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label>Total amount</label>
+            <input type="text" class="form-control" asp-for="TotalAmount" />
+        </div>
+    </div>
+
+    <br />
+    <input type="submit" class="btn btn-primary" value="save" />
+
+</form>
