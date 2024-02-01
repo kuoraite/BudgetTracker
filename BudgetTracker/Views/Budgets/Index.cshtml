@@ -1,0 +1,34 @@
+﻿@model List<Budget>
+
+@{
+    ViewData["Title"] = "Budgets Page";
+}
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table table-striped">
+        <tr>
+            <th>Name</th>
+            <th>Total amount</th>
+            <th>View</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        @foreach (var budget in Model)
+        {
+            <tr>
+                <td>@budget.Name</td>
+                <td>@budget.TotalAmount</td>
+                <td><a class="btn btn-link" asp-controller="budget" asp-action="details" asp-route-id="@budget.BudgetId">View</a></td>
+                <td><a class="btn btn-link" asp-controller="budget" asp-action="edit" asp-route-id="@budget.BudgetId">Edit</a></td>
+                <td><a class="btn btn-link" asp-controller="budget" asp-action="delete" asp-route-id="@budget.BudgetId">Delete</a></td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <h5>No budgets have been created yet.</h5>
+}
+
+<a class="btn btn-primary" href="/budgets/create">Create a budget</a>
