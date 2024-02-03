@@ -1,0 +1,71 @@
+﻿@using BudgetTracker.ViewModels
+@using BudgetTracker.Controllers
+@model BudgetDetailsViewModel;
+
+@{
+    ViewData["Title"] = "Budgets Page";
+}
+
+<div style="display: flex">
+    <div>
+        <h3>Incomes</h3>
+        <table class="table table-light mx-2" id="incomeTable">
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Category</th>
+            </tr>
+            @foreach (Income income in Model.Incomes)
+            {
+                <tr>
+                    <th>@income.Name</th>
+                    <th>@income.Description</th>
+                    <th>@income.Amount</th>
+                    <th>@income.Category</th>
+                </tr>
+            }   
+            
+            <form method="post" asp-controller="incomes" asp-action="CreateIncome">
+                <tr>
+                    <th>
+                        <input type="text" asp-for="NewIncome.Name"/>
+                    </th>
+                    <th>
+                    <input type="text" asp-for="NewIncome.Description" />
+                    </th>
+                    <th>
+                        <input type="numer" asp-for="NewIncome.Amount" />
+                    </th>
+
+                    <input type="hidden" asp-for="NewIncome.BudgetId" value="@Model.Budget.BudgetId" />
+
+                    <th>
+                        <input type="submit" class="btn btn-primary" value="save" />
+                    </th>
+                </tr>
+            </form>
+        </table>
+    </div>
+
+    <div>
+        <h3>Expenses</h3>
+        <table class="table table-light mx-2">
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Category</th>
+            </tr>
+            @foreach (Expense expense in Model.Expenses)
+            {
+                <tr>
+                    <th>@expense.Name</th>
+                    <th>@expense.Description</th>
+                    <th>@expense.Amount</th>
+                    <th>@expense.Category</th>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
