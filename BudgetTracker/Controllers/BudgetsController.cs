@@ -1,8 +1,6 @@
 ﻿using BudgetTracker.Models;
-using Microsoft.AspNetCore.Http;
+using BudgetTracker.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BudgetTracker.Controllers
 {
@@ -25,7 +23,18 @@ namespace BudgetTracker.Controllers
         // GET: BudgetsController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var budget = context.Budgets.FirstOrDefault(x => x.BudgetId == id);
+
+            if (budget == null) return NotFound();
+
+            BudgetDetailsViewModel viewModel = new()
+            {
+                Budget = budget,
+                Expenses = context.Expenses.Where(x => x.BudgetId == id).ToList(),
+                Incomes = context.Incomes.Where(x => x.BudgetId == id).ToList()
+            };
+
+            return View(viewModel);
         }
 
         // GET: BudgetsController/Create
