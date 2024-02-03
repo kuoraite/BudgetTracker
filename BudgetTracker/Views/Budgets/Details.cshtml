@@ -66,6 +66,26 @@
                     <th>@expense.Category</th>
                 </tr>
             }
+
+            <form method="post" asp-controller="expenses" asp-action="CreateExpense">
+            <tr>
+                <th>
+                    <input type="text" asp-for="NewExpense.Name" />
+                </th>
+                <th>
+                    <input type="text" asp-for="NewExpense.Description" />
+                </th>
+                <th>
+                    <input type="numer" asp-for="NewExpense.Amount" />
+                </th>
+
+                <input type="hidden" asp-for="NewExpense.BudgetId" value="@Model.Budget.BudgetId" />
+
+                <th>
+                    <input type="submit" class="btn btn-primary" value="save" />
+                </th>
+            </tr>
+            </form>
         </table>
     </div>
 </div>

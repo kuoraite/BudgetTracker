@@ -9,5 +9,6 @@ namespace BudgetTracker.ViewModels
         public List<Income> Incomes { get; set; }
 
         public Income NewIncome { get; set; }
+        public Expense NewExpense {  get; set; }
     }
 }

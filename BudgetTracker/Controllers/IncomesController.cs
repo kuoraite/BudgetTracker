@@ -12,10 +12,6 @@ namespace BudgetTracker.Controllers
         {
             this.context = context;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
 
         [HttpPost]
         public IActionResult CreateIncome(BudgetDetailsViewModel viewModel)
