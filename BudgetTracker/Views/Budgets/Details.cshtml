@@ -52,7 +52,7 @@
                             {
                                 <option value="@category.CategoryId">@category.Name</option>
                             }
-                        </select>
+                    </select>
                     </td>
 
                     <input type="hidden" asp-for="NewIncome.BudgetId" value="@Model.Budget.BudgetId" />
@@ -77,30 +77,47 @@
             @foreach (Expense expense in Model.Expenses)
             {
                 <tr>
-                    <th>@expense.Name</th>
-                    <th>@expense.Description</th>
-                    <th>@expense.Amount</th>
-                    <th>@expense.Category</th>
+                    <td>@expense.Name</td>
+                    <td>@expense.Description</td>
+                    <td>@expense.Amount</td>
+                    @if (expense.CategoryId != null)
+                    {
+                        <td>@Model.Categories.FirstOrDefault(x => x.CategoryId == expense.CategoryId).Name</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
                 </tr>
             }
 
             <form method="post" asp-controller="expenses" asp-action="CreateExpense">
             <tr>
-                <th>
+                <td>
                     <input type="text" asp-for="NewExpense.Name" />
-                </th>
-                <th>
+                </td>
+                <td>
                     <input type="text" asp-for="NewExpense.Description" />
-                </th>
-                <th>
+                </td>
+                <td>
                     <input type="numer" asp-for="NewExpense.Amount" />
-                </th>
+                </td>
+
+                <td>
+                    <select class="form-select" asp-for="NewExpense.CategoryId" aria-label="Default select example">
+                        <option value="" selected>Choose a category</option>
+                            @foreach (Category category in Model.Categories)
+                            {
+                            <option value="@category.CategoryId">@category.Name</option>
+                            }
+                    </select>
+                </td>
 
                 <input type="hidden" asp-for="NewExpense.BudgetId" value="@Model.Budget.BudgetId" />
 
-                <th>
+                <td>
                     <input type="submit" class="btn btn-primary" value="save" />
-                </th>
+                </td>
             </tr>
             </form>
         </table>
