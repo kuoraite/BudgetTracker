@@ -31,7 +31,8 @@ namespace BudgetTracker.Controllers
             {
                 Budget = budget,
                 Expenses = context.Expenses.Where(x => x.BudgetId == id).ToList(),
-                Incomes = context.Incomes.Where(x => x.BudgetId == id).ToList()
+                Incomes = context.Incomes.Where(x => x.BudgetId == id).ToList(),
+                Categories = context.Categories.ToList()
             };
 
             return View(viewModel);
