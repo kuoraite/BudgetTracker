@@ -22,5 +22,19 @@ namespace BudgetTracker.Controllers
 
             return RedirectToAction("details", "budgets", new { id = viewModel.NewExpense.BudgetId });
         }
+
+        public IActionResult DeleteExpense(int id)
+        {
+            var expense = context.Expenses.FirstOrDefault(x => x.ExpenseId == id);
+
+            if (expense == null) return NotFound();
+
+            var budgetId = expense.BudgetId;
+
+            context.Remove(expense);
+            context.SaveChanges();
+
+            return RedirectToAction("details", "budgets", new { id = budgetId });
+        }
     }
 }

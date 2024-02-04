@@ -74,6 +74,7 @@
                 <th>Description</th>
                 <th>Amount</th>
                 <th>Category</th>
+                <th></th>
             </tr>
             @foreach (Expense expense in Model.Expenses)
             {
@@ -89,6 +90,7 @@
                     {
                         <td></td>
                     }
+                    <td><a class="btn btn-primary" asp-controller="Expenses" asp-action="DeleteExpense" asp-route-id="@expense.ExpenseId" onclick="return confirmDelete('expense')"></a>Delete</td>
                 </tr>
             }
 
