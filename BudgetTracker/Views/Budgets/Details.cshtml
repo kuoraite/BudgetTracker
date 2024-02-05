@@ -96,7 +96,23 @@
             {
                 <tr>
                     <td>@expense.Name</td>
-                    <td>@expense.Description</td>
+                    @if (expense.Description != null)
+                    {
+                        <td>
+
+                            <a class="btn view-description-btn" data-toggle="modal" data-target="#detailsModal">
+                                <i class="fas fa-eye">View description</i>
+                            </a>
+
+                            <input type="hidden" class="description-data" value="@expense.Description" />
+
+                            <partial name="_ReadModal" />
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
                     <td>@expense.Amount</td>
                     @if (expense.CategoryId != null)
                     {
