@@ -6,13 +6,14 @@
     ViewData["Title"] = "Budgets Page";
 }
 
-<div style="display: flex">
-    <div>
+<div class="container">
+    <div class="row">
+    <div class="col">
         <h3>Incomes</h3>
-        <table class="table table-light mx-2" id="incomeTable">
+        <table class="table table-light w-auto small" id="incomeTable">
             <tr>
                 <th>Name</th>
-                <th>Description</th>
+                @* <th>Description</th> *@
                 <th>Amount</th>
                 <th>Category</th>
                 <th></th>
@@ -20,14 +21,13 @@
             @foreach (Income income in Model.Incomes)
             {
                 <tr>
-                    <td>@income.Name</td>
                     @if (income.Description != null)
                     {
                         <td>
-
+                            @income.Name 
                             <a class="btn view-description-btn" data-toggle="modal" data-target="#detailsModal">
-                                <i class="fas fa-eye">View description</i>
-                            </a>
+                                <i class="fas fa-eye">i</i>
+                            </a>                            
 
                             <input type="hidden" class="description-data" value="@income.Description" />
 
@@ -36,7 +36,7 @@
                     }
                     else
                     {
-                        <td></td>
+                        <td>@income.Name </td>
                     }
                     <td>@income.Amount</td>
                     @if (income.CategoryId != null)
@@ -47,23 +47,23 @@
                     {
                         <td></td>
                     }
-                    <td><a class="btn btn-primary" asp-controller="Incomes" asp-action="DeleteIncome" asp-route-id="@income.IncomeId" onclick="return confirmDelete('income')"></a>Delete</td>
+                    <td><a class="btn btn-primary" asp-controller="Incomes" asp-action="DeleteIncome" asp-route-id="@income.IncomeId" onclick="return confirmDelete('income')">Delete</a></td>
                 </tr>
             }   
             
-            <form method="post" asp-controller="incomes" asp-action="CreateIncome">
+            <form method="post" asp-controller="incomes" asp-action="CreateIncome" class="custom-form">
                 <tr>
                     <td>
                         <input type="text" asp-for="NewIncome.Name"/>
                     </td>
-                    <td>
+                    @* <td>
                         <input type="text" asp-for="NewIncome.Description" />
+                    </td> *@
+                <td class="col-2">
+                    <input type="number" asp-for="NewIncome.Amount" style="width: 100px;" />
                     </td>
                     <td>
-                        <input type="number" asp-for="NewIncome.Amount" />
-                    </td>
-                    <td>
-                    <select class="form-select" asp-for="NewIncome.CategoryId" aria-label="Default select example">
+                    <select class="form-select" asp-for="NewIncome.CategoryId" aria-label="Default select example" style="width: 170px;">
                         <option value="" selected>Choose a category</option>
                             @foreach (Category category in Model.Categories)
                             {
@@ -80,11 +80,12 @@
                 </tr>
             </form>
         </table>
+        @* </div> *@
     </div>
 
-    <div>
+    <div class="col">
         <h3>Expenses</h3>
-        <table class="table table-light mx-2">
+        <table class="table table-light w-auto small">
             <tr>
                 <th>Name</th>
                 <th>Description</th>
@@ -135,7 +136,7 @@
                     <input type="text" asp-for="NewExpense.Description" />
                 </td>
                 <td>
-                    <input type="numer" asp-for="NewExpense.Amount" />
+                    <input type="number" asp-for="NewExpense.Amount" style="width: 100px;" />
                 </td>
 
                 <td>
@@ -156,6 +157,7 @@
             </tr>
             </form>
         </table>
+        </div>
     </div>
 </div>
 
@@ -168,9 +170,12 @@
         $(document).ready(function () {
             $('.view-description-btn').on('click', function () {
                 var description = $(this).siblings('.description-data').val();
-                var name = $(this).closest('tr').find('td:first').text();
-                $('#descriptionContent').text(description);
-                $('#nameContent').text(name);
+                var name = $(this).closest('td').contents().filter(function () {
+                    return this.nodeType === 3;
+                }).text().trim();
+
+                $('#nameContent').text("Name: " + name);
+                $('#descriptionContent').text("Description: " + description);
             });
         });
     </script>
