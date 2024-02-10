@@ -13,7 +13,6 @@
         <table class="table table-light w-auto small" id="incomeTable">
             <tr>
                 <th>Name</th>
-                @* <th>Description</th> *@
                 <th>Amount</th>
                 <th>Category</th>
                 <th></th>
@@ -24,8 +23,8 @@
                     @if (income.Description != null)
                     {
                         <td>
-                            @income.Name 
-                            <a class="btn view-description-btn" data-toggle="modal" data-target="#detailsModal">
+                            @income.Name
+                                <a class="btn view-description-btn" data-toggle="modal" data-target="#detailsModal" data-income-id="@income.IncomeId">
                                 <i class="fas fa-eye">i</i>
                             </a>                            
 
@@ -56,9 +55,6 @@
                     <td>
                         <input type="text" asp-for="NewIncome.Name"/>
                     </td>
-                    @* <td>
-                        <input type="text" asp-for="NewIncome.Description" />
-                    </td> *@
                 <td class="col-2">
                     <input type="number" asp-for="NewIncome.Amount" style="width: 100px;" />
                     </td>
@@ -80,7 +76,6 @@
                 </tr>
             </form>
         </table>
-        @* </div> *@
     </div>
 
     <div class="col">
@@ -174,8 +169,11 @@
                     return this.nodeType === 3;
                 }).text().trim();
 
+                var incomeId = $(this).data('income-id');
+                $('#incomeIdInput').val(incomeId);
+
                 $('#nameContent').text("Name: " + name);
-                $('#descriptionContent').text("Description: " + description);
+                $('#descriptionContent').html("<strong>Description: </strong>" + description);
             });
         });
     </script>

@@ -8,9 +8,18 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p class="font-weight-bold">Description: <span id="descriptionContent"></span></p>
+                <p class="font-weight-bold" id="descriptionContent"></p>
+
+                <form id="detailsForm" asp-controller="Incomes" asp-action="EditDescription" method="post">
+                    <div class="form-group">
+                        <label for="descriptionInput">New Description:</label>
+                        <input type="text" class="form-control" id="descriptionInput" name="description" />
+                    </div>
+                    <input type="hidden" id="incomeIdInput" name="incomeId" />
+                </form>
             </div>
             <div class="modal-footer">
+                <button type="submit" class="btn btn-primary mt-2" form="detailsForm">Save Description</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>

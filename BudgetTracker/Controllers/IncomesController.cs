@@ -37,5 +37,18 @@ namespace BudgetTracker.Controllers
 
             return RedirectToAction("details", "budgets", new { id = budgetId});
         }
+
+        public IActionResult EditDescription(string description, int incomeId)
+        {
+            var income = context.Incomes.FirstOrDefault(x => x.IncomeId == incomeId);
+            if (income == null) return NotFound();
+
+            income.Description = description;
+            context.SaveChanges();
+
+            var budgetId = income.BudgetId;
+
+            return RedirectToAction("Details", "Budgets", new { id =  budgetId});
+        }
     }
 }
