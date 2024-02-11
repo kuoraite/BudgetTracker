@@ -107,5 +107,22 @@ namespace BudgetTracker.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        public IActionResult EditDescription(string budgetItemType, int transactionId, string description)
+        {
+            if (budgetItemType == "Income")
+            {
+                var incomeId = transactionId;
+                return RedirectToAction("EditDescription", "Incomes", new { incomeId, description });
+            }
+            else if (budgetItemType == "Expense")
+            {
+                var expenseId = transactionId;
+                return RedirectToAction("EditDescription", "Expenses", new { expenseId, description });
+            }
+
+            return NotFound();
+        }
     }
 }

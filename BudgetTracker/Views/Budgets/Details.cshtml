@@ -24,7 +24,7 @@
                     {
                         <td>
                             @income.Name
-                                <a class="btn view-description-btn" data-toggle="modal" data-target="#detailsModal" data-income-id="@income.IncomeId">
+                                <a class="btn view-description-btn income-btn" data-toggle="modal" data-target="#detailsModal" data-transaction-id="@income.IncomeId">
                                 <i class="fas fa-eye">i</i>
                             </a>                            
 
@@ -83,7 +83,6 @@
         <table class="table table-light w-auto small">
             <tr>
                 <th>Name</th>
-                <th>Description</th>
                 <th>Amount</th>
                 <th>Category</th>
                 <th></th>
@@ -91,14 +90,13 @@
             @foreach (Expense expense in Model.Expenses)
             {
                 <tr>
-                    <td>@expense.Name</td>
                     @if (expense.Description != null)
                     {
                         <td>
-
-                            <a class="btn view-description-btn" data-toggle="modal" data-target="#detailsModal">
-                                <i class="fas fa-eye">View description</i>
-                            </a>
+                            @expense.Name
+                                <a class="btn view-description-btn expense-btn" data-toggle="modal" data-target="#detailsModal" data-transaction-id="@expense.ExpenseId">
+                                <i class="fas fa-eye">i</i>
+                            </a>                            
 
                             <input type="hidden" class="description-data" value="@expense.Description" />
 
@@ -107,7 +105,7 @@
                     }
                     else
                     {
-                        <td></td>
+                        <td>@expense.Name </td>
                     }
                     <td>@expense.Amount</td>
                     @if (expense.CategoryId != null)
@@ -118,7 +116,7 @@
                     {
                         <td></td>
                     }
-                    <td><a class="btn btn-primary" asp-controller="Expenses" asp-action="DeleteExpense" asp-route-id="@expense.ExpenseId" onclick="return confirmDelete('expense')"></a>Delete</td>
+                        <td><a class="btn btn-primary" asp-controller="Expenses" asp-action="DeleteExpense" asp-route-id="@expense.ExpenseId" onclick="return confirmDelete('expense')">Delete</a></td>
                 </tr>
             }
 
@@ -126,9 +124,6 @@
             <tr>
                 <td>
                     <input type="text" asp-for="NewExpense.Name" />
-                </td>
-                <td>
-                    <input type="text" asp-for="NewExpense.Description" />
                 </td>
                 <td>
                     <input type="number" asp-for="NewExpense.Amount" style="width: 100px;" />
@@ -169,8 +164,11 @@
                     return this.nodeType === 3;
                 }).text().trim();
 
-                var incomeId = $(this).data('income-id');
-                $('#incomeIdInput').val(incomeId);
+                var transactionId = $(this).data('transaction-id');
+                var isIncome = $(this).hasClass('income-btn');
+
+                $('#transactionIdInput').val(transactionId);
+                $('#budgetItemType').val(isIncome ? 'Income' : 'Expense');
 
                 $('#nameContent').text("Name: " + name);
                 $('#descriptionContent').html("<strong>Description: </strong>" + description);

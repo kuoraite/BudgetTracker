@@ -38,17 +38,43 @@ namespace BudgetTracker.Controllers
             return RedirectToAction("details", "budgets", new { id = budgetId});
         }
 
-        public IActionResult EditDescription(string description, int incomeId)
+        [HttpGet]
+        public IActionResult EditDescription(int incomeId, string description)
+        {
+            return ProcessEditDescription(incomeId, description);
+        }
+
+        [HttpPost]
+        public IActionResult ProcessEditDescription(int incomeId, string description)
+        {
+            var result = CommonEditDescriptionLogic(incomeId, description);
+
+            if (result is ViewResult)
+            {
+                return result;
+            }
+
+            var budgetId = ((ObjectResult)result).Value as int?;
+            if (budgetId.HasValue)
+            {
+                return RedirectToAction("Details", "Budgets", new { id = budgetId.Value });
+            }
+
+            return NotFound();
+        }
+
+        private IActionResult CommonEditDescriptionLogic(int incomeId, string description)
         {
             var income = context.Incomes.FirstOrDefault(x => x.IncomeId == incomeId);
-            if (income == null) return NotFound();
+            if (income == null)
+            {
+                return NotFound();
+            }
 
             income.Description = description;
             context.SaveChanges();
 
-            var budgetId = income.BudgetId;
-
-            return RedirectToAction("Details", "Budgets", new { id =  budgetId});
+            return Ok(income.BudgetId);
         }
     }
 }

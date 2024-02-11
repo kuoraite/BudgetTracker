@@ -10,12 +10,13 @@
             <div class="modal-body">
                 <p class="font-weight-bold" id="descriptionContent"></p>
 
-                <form id="detailsForm" asp-controller="Incomes" asp-action="EditDescription" method="post">
+                <form id="detailsForm" method="post" asp-controller="Budgets" asp-action="EditDescription">
+                    <input type="hidden" id="budgetItemType" name="budgetItemType" />
                     <div class="form-group">
                         <label for="descriptionInput">New Description:</label>
                         <input type="text" class="form-control" id="descriptionInput" name="description" />
                     </div>
-                    <input type="hidden" id="incomeIdInput" name="incomeId" />
+                    <input type="hidden" id="transactionIdInput" name="transactionId" />
                 </form>
             </div>
             <div class="modal-footer">
