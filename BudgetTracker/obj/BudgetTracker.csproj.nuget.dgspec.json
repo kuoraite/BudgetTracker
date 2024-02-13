@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kuora\\Desktop\\New folder\\BudgetTracker\\BudgetTracker\\BudgetTracker.csproj": {}
+    "C:\\Users\\kuora\\Desktop\\BudgetTracker\\BudgetTracker\\BudgetTracker.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kuora\\Desktop\\New folder\\BudgetTracker\\BudgetTracker\\BudgetTracker.csproj": {
+    "C:\\Users\\kuora\\Desktop\\BudgetTracker\\BudgetTracker\\BudgetTracker.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kuora\\Desktop\\New folder\\BudgetTracker\\BudgetTracker\\BudgetTracker.csproj",
+        "projectUniqueName": "C:\\Users\\kuora\\Desktop\\BudgetTracker\\BudgetTracker\\BudgetTracker.csproj",
         "projectName": "BudgetTracker",
-        "projectPath": "C:\\Users\\kuora\\Desktop\\New folder\\BudgetTracker\\BudgetTracker\\BudgetTracker.csproj",
+        "projectPath": "C:\\Users\\kuora\\Desktop\\BudgetTracker\\BudgetTracker\\BudgetTracker.csproj",
         "packagesPath": "C:\\Users\\kuora\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kuora\\Desktop\\New folder\\BudgetTracker\\BudgetTracker\\obj\\",
+        "outputPath": "C:\\Users\\kuora\\Desktop\\BudgetTracker\\BudgetTracker\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

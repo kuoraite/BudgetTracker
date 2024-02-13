@@ -1,0 +1,79 @@
+﻿@{
+    ViewData["Title"] = "Graphs Page";
+}
+
+<h3>Graphs page</h3>
+<br />
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h4>Incomes by category</h4>
+            <canvas id="incomesChart"></canvas>
+        </div>
+
+        <div class="col">
+            <h4>Expenses by category</h4>
+            <canvas id="expensesChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    const incomeCtx = document.getElementById('incomesChart');
+    const expenseCtx = document.getElementById('expensesChart');
+        
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Graphs/GetIncomesData",
+            data: {
+                itemType: "Incomes",
+            },
+            success: function (incomeData) {
+                renderDoughnutChart(incomeCtx, incomeData);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Graphs/GetIncomesData",
+                    data: {
+                        itemType: "Expenses",
+                    },
+                    success: function (expenseData) {
+                        renderDoughnutChart(expenseCtx, expenseData);
+                    }
+                });
+            }
+        });        
+
+        function renderDoughnutChart(ctx, data) {
+            var _chartLabels = data.categoryNames;
+            var _chartData = data.categorySum;
+            var _chartColors = data.colors;
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: _chartLabels,
+                    datasets: [{
+                        data: _chartData.map(item => item.sum),
+                        backgroundColor: _chartColors,
+                        borderColor: _chartColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    }
+                },
+            });
+        }
+    });
+</script>

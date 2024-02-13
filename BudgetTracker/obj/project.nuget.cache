@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cK1nPdRv0Z04XFtyz8kS2Nk+XdcyTNl1lOywsg6O7ZgLbsA9HueNYm9V4VCDo4esjYthpTcSmg8NBXVTBv/hCQ==",
+  "dgSpecHash": "ku//sytPsndwns4fwVoyAVVPy+2aCbnfg6yJzneOZQ9eTpGnOFJB5iWZRuIkYxNkJlyrbt71iFCN7sZ652yFDg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\kuora\\Desktop\\New folder\\BudgetTracker\\BudgetTracker\\BudgetTracker.csproj",
+  "projectFilePath": "C:\\Users\\kuora\\Desktop\\BudgetTracker\\BudgetTracker\\BudgetTracker.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\kuora\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\kuora\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",

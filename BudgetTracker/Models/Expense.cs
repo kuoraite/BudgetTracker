@@ -2,7 +2,7 @@
 
 namespace BudgetTracker.Models
 {
-    public class Expense
+    public class Expense : ITransaction
     {
         [Required]
         public int ExpenseId { get; set; }
