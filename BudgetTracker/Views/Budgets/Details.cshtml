@@ -1,5 +1,6 @@
 ﻿@using BudgetTracker.ViewModels
 @using BudgetTracker.Controllers
+@using BudgetTracker.Enums
 @model BudgetDetailsViewModel;
 
 @{
@@ -8,148 +9,259 @@
 
 <div class="container">
     <div class="row">
-    <div class="col">
-        <h3>Incomes</h3>
-        <table class="table table-light w-auto small" id="incomeTable">
-            <tr>
-                <th>Name</th>
-                <th>Amount</th>
-                <th>Category</th>
-                <th></th>
-            </tr>
-            @foreach (Income income in Model.Incomes)
+        <p>Choose the date:</p>
+        <form asp-controller="budgets" asp-action="GetIncomesAndExpensesByDate" method="post" asp-route-budgetId="@Model.Budget.BudgetId">
+
+            <div class="form-control">
+                <label>Year</label>
+                <input type="text" asp-for="DateViewModel.Year" />
+                <span asp-validation-for="DateViewModel.Year" class="text-danger"></span>
+            </div>
+
+            <div class="form-control">
+                <label>Month</label>
+                <div class="col-md-10">
+                    <select asp-for="DateViewModel.Month" asp-items="Html.GetEnumSelectList<Months>()"></select>
+                    <span asp-validation-for="DateViewModel.Month" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-control">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+        <div class="col">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <h3>Incomes</h3>
+            @if (Model.Incomes.Count < 1 || Model.Incomes == null)
             {
-                <tr>
-                    @if (income.Description != null)
-                    {
+                <p>No incomes have been tracked yet.</p>
+
+                <table class="table table-light w-auto small" id="incomeTable">
+                    <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th></th>
+                    </tr>
+
+                    <form method="post" asp-controller="incomes" asp-action="CreateIncome" class="custom-form">
+                    <tr>
                         <td>
-                            @income.Name
-                                <a class="btn view-description-btn income-btn" data-toggle="modal" data-target="#detailsModal" data-transaction-id="@income.IncomeId">
-                                <i class="fas fa-eye">i</i>
-                            </a>                            
-
-                            <input type="hidden" class="description-data" value="@income.Description" />
-
-                            <partial name="_ReadModal" />
+                            <input type="text" asp-for="NewIncome.Name" />
                         </td>
-                    }
-                    else
+                        <td class="col-2">
+                            <input type="number" asp-for="NewIncome.Amount" style="width: 100px;" />
+                        </td>
+                        <td>
+                            <select class="form-select" asp-for="NewIncome.CategoryId" aria-label="Default select example" style="width: 170px;">
+                                <option value="" selected>Choose a category</option>
+                                @foreach (Category category in Model.Categories)
+                                {
+                                    <option value="@category.CategoryId">@category.Name</option>
+                                }
+                            </select>
+                        </td>
+
+                        <input type="hidden" asp-for="NewIncome.BudgetId" value="@Model.Budget.BudgetId" />
+
+                        <td>
+                            <input type="submit" class="btn btn-primary" value="save" />
+                        </td>
+                    </tr>
+                </form>
+                </table>
+            }
+            else
+            {
+                <table class="table table-light w-auto small" id="incomeTable">
+                    <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th></th>
+                    </tr>
+                    @foreach (Income income in Model.Incomes)
                     {
-                        <td>@income.Name </td>
-                    }
-                    <td>@income.Amount</td>
-                    @if (income.CategoryId != null)
-                    {
-                        <td>@Model.Categories.FirstOrDefault(x => x.CategoryId == income.CategoryId).Name</td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
-                    <td><a class="btn btn-primary" asp-controller="Incomes" asp-action="DeleteIncome" asp-route-id="@income.IncomeId" onclick="return confirmDelete('income')">Delete</a></td>
-                </tr>
-            }   
-            
-            <form method="post" asp-controller="incomes" asp-action="CreateIncome" class="custom-form">
-                <tr>
-                    <td>
-                        <input type="text" asp-for="NewIncome.Name"/>
-                    </td>
-                <td class="col-2">
-                    <input type="number" asp-for="NewIncome.Amount" style="width: 100px;" />
-                    </td>
-                    <td>
-                    <select class="form-select" asp-for="NewIncome.CategoryId" aria-label="Default select example" style="width: 170px;">
-                        <option value="" selected>Choose a category</option>
-                            @foreach (Category category in Model.Categories)
+                        <tr>
+                            @if (income.Description != null)
                             {
-                                <option value="@category.CategoryId">@category.Name</option>
+                                <td>
+                                    @income.Name
+                                    <a class="btn view-description-btn income-btn" data-toggle="modal" data-target="#detailsModal" data-transaction-id="@income.IncomeId">
+                                        <i class="fas fa-eye">i</i>
+                                    </a>
+
+                                    <input type="hidden" class="description-data" value="@income.Description" />
+
+                                    <partial name="_ReadModal" />
+                                </td>
                             }
-                    </select>
-                    </td>
+                            else
+                            {
+                                <td>@income.Name </td>
+                            }
+                            <td>@income.Amount</td>
+                            @if (income.CategoryId != null)
+                            {
+                                <td>@Model.Categories.FirstOrDefault(x => x.CategoryId == income.CategoryId).Name</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td><a class="btn btn-primary" asp-controller="Incomes" asp-action="DeleteIncome" asp-route-id="@income.IncomeId" onclick="return confirmDelete('income')">Delete</a></td>
+                        </tr>
+                    }
 
-                    <input type="hidden" asp-for="NewIncome.BudgetId" value="@Model.Budget.BudgetId" />
+                    <form method="post" asp-controller="incomes" asp-action="CreateIncome" class="custom-form">
+                    <tr>
+                        <td>
+                            <input type="text" asp-for="NewIncome.Name" />
+                        </td>
+                        <td class="col-2">
+                            <input type="number" asp-for="NewIncome.Amount" style="width: 100px;" />
+                        </td>
+                        <td>
+                            <select class="form-select" asp-for="NewIncome.CategoryId" aria-label="Default select example" style="width: 170px;">
+                                <option value="" selected>Choose a category</option>
+                                    @foreach (Category category in Model.Categories)
+                                    {
+                                    <option value="@category.CategoryId">@category.Name</option>
+                                    }
+                            </select>
+                        </td>
 
-                    <td>
-                        <input type="submit" class="btn btn-primary" value="save" />
-                    </td>
-                </tr>
-            </form>
-        </table>
+                        <input type="hidden" asp-for="NewIncome.BudgetId" value="@Model.Budget.BudgetId" />
+
+                        <td>
+                            <input type="submit" class="btn btn-primary" value="save" />
+                        </td>
+                    </tr>
+                    </form>
+                </table>
+            }            
     </div>
 
     <div class="col">
         <h3>Expenses</h3>
-        <table class="table table-light w-auto small">
-            <tr>
-                <th>Name</th>
-                <th>Amount</th>
-                <th>Category</th>
-                <th></th>
-            </tr>
-            @foreach (Expense expense in Model.Expenses)
+        @if(Model.Expenses.Count < 1)
             {
-                <tr>
-                    @if (expense.Description != null)
-                    {
+                <p>No expenses have been tracked yet.</p>
+
+                <table class="table table-light w-auto small">
+                    <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th></th>
+                    </tr>
+                <form method="post" asp-controller="expenses" asp-action="CreateExpense">
+                    <tr>
                         <td>
-                            @expense.Name
-                                <a class="btn view-description-btn expense-btn" data-toggle="modal" data-target="#detailsModal" data-transaction-id="@expense.ExpenseId">
-                                <i class="fas fa-eye">i</i>
-                            </a>                            
-
-                            <input type="hidden" class="description-data" value="@expense.Description" />
-
-                            <partial name="_ReadModal" />
+                            <input type="text" asp-for="NewExpense.Name" />
                         </td>
-                    }
-                    else
-                    {
-                        <td>@expense.Name </td>
-                    }
-                    <td>@expense.Amount</td>
-                    @if (expense.CategoryId != null)
-                    {
-                        <td>@Model.Categories.FirstOrDefault(x => x.CategoryId == expense.CategoryId).Name</td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
-                        <td><a class="btn btn-primary" asp-controller="Expenses" asp-action="DeleteExpense" asp-route-id="@expense.ExpenseId" onclick="return confirmDelete('expense')">Delete</a></td>
-                </tr>
+                        <td>
+                            <input type="number" asp-for="NewExpense.Amount" style="width: 100px;" />
+                        </td>
+
+                        <td>
+                            <select class="form-select" asp-for="NewExpense.CategoryId" aria-label="Default select example">
+                                <option value="" selected>Choose a category</option>
+                                @foreach (Category category in Model.Categories)
+                                {
+                                    <option value="@category.CategoryId">@category.Name</option>
+                                }
+                            </select>
+                        </td>
+
+                        <input type="hidden" asp-for="NewExpense.BudgetId" value="@Model.Budget.BudgetId" />
+
+                        <td>
+                            <input type="submit" class="btn btn-primary" value="save" />
+                        </td>
+                    </tr>
+                </form>
+                </table>
             }
-
-            <form method="post" asp-controller="expenses" asp-action="CreateExpense">
-            <tr>
-                <td>
-                    <input type="text" asp-for="NewExpense.Name" />
-                </td>
-                <td>
-                    <input type="number" asp-for="NewExpense.Amount" style="width: 100px;" />
-                </td>
-
-                <td>
-                    <select class="form-select" asp-for="NewExpense.CategoryId" aria-label="Default select example">
-                        <option value="" selected>Choose a category</option>
-                            @foreach (Category category in Model.Categories)
+        else{
+                <table class="table table-light w-auto small">
+                    <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th></th>
+                    </tr>
+                    @foreach (Expense expense in Model.Expenses)
+                    {
+                        <tr>
+                            @if (expense.Description != null)
                             {
-                            <option value="@category.CategoryId">@category.Name</option>
+                                <td>
+                                    @expense.Name
+                                    <a class="btn view-description-btn expense-btn" data-toggle="modal" data-target="#detailsModal" data-transaction-id="@expense.ExpenseId">
+                                        <i class="fas fa-eye">i</i>
+                                    </a>
+
+                                    <input type="hidden" class="description-data" value="@expense.Description" />
+
+                                    <partial name="_ReadModal" />
+                                </td>
                             }
-                    </select>
-                </td>
+                            else
+                            {
+                                <td>@expense.Name </td>
+                            }
+                            <td>@expense.Amount</td>
+                            @if (expense.CategoryId != null)
+                            {
+                                <td>@Model.Categories.FirstOrDefault(x => x.CategoryId == expense.CategoryId).Name</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td><a class="btn btn-primary" asp-controller="Expenses" asp-action="DeleteExpense" asp-route-id="@expense.ExpenseId" onclick="return confirmDelete('expense')">Delete</a></td>
+                        </tr>
+                    }
 
-                <input type="hidden" asp-for="NewExpense.BudgetId" value="@Model.Budget.BudgetId" />
+                    <form method="post" asp-controller="expenses" asp-action="CreateExpense">
+                    <tr>
+                        <td>
+                            <input type="text" asp-for="NewExpense.Name" />
+                        </td>
+                        <td>
+                            <input type="number" asp-for="NewExpense.Amount" style="width: 100px;" />
+                        </td>
 
-                <td>
-                    <input type="submit" class="btn btn-primary" value="save" />
-                </td>
-            </tr>
-            </form>
-        </table>
+                        <td>
+                            <select class="form-select" asp-for="NewExpense.CategoryId" aria-label="Default select example">
+                                <option value="" selected>Choose a category</option>
+                                    @foreach (Category category in Model.Categories)
+                                    {
+                                    <option value="@category.CategoryId">@category.Name</option>
+                                    }
+                            </select>
+                        </td>
+
+                        <input type="hidden" asp-for="NewExpense.BudgetId" value="@Model.Budget.BudgetId" />
+
+                        <td>
+                            <input type="submit" class="btn btn-primary" value="save" />
+                        </td>
+                    </tr>
+                    </form>
+                </table>
+        }
         </div>
     </div>
-</div>
+</div> 
 
 <a class="btn btn-primary" asp-controller="graphs" asp-action="index" asp-route-id="@Model.Budget.BudgetId">Overview</a>
 

@@ -38,6 +38,29 @@ namespace BudgetTracker.Controllers
             return View(viewModel);
         }
 
+        public ActionResult GetIncomesAndExpensesByDate(BudgetDetailsViewModel model, int budgetId)
+        {
+           /* if (!ModelState.IsValid)
+            {
+                return View("Details", model);
+            }*/
+
+            var budget = context.Budgets.FirstOrDefault(x => x.BudgetId == budgetId);
+
+            if (budget == null) return NotFound();
+
+            BudgetDetailsViewModel viewModel = new()
+            {
+                Budget = budget,
+                Expenses = context.Expenses.Where(x => x.BudgetId == budget.BudgetId && x.Year == model.DateViewModel.Year && x.Month == model.DateViewModel.Month).ToList(),
+                Incomes = context.Incomes.Where(x => x.BudgetId == budget.BudgetId && x.Year == model.DateViewModel.Year && x.Month == model.DateViewModel.Month).ToList(),
+                Categories = context.Categories.ToList(),
+                DateViewModel = model.DateViewModel
+            };
+
+            return View("Details", viewModel);
+        }
+
         // GET: BudgetsController/Create
         public ActionResult Create()
         {

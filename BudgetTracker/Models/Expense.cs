@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BudgetTracker.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace BudgetTracker.Models
 {
@@ -9,6 +10,10 @@ namespace BudgetTracker.Models
         public string Name { get; set; }
         public string? Description { get; set; }
         public decimal Amount { get; set; }
+
+        [RegularExpression(@"^202[0-9]$")]
+        public int Year { get; set; }
+        public Months Month { get; set; }
 
         public int BudgetId { get; set; } //Foreign key to Budget
         public Budget Budget { get; set; }//Navigation property
