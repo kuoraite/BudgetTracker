@@ -1,4 +1,5 @@
-﻿using BudgetTracker.Models;
+﻿using BudgetTracker.Enums;
+using BudgetTracker.Models;
 using BudgetTracker.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
