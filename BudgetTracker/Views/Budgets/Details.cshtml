@@ -8,32 +8,26 @@
 }
 
 <div class="container">
-    <div class="row">
-        <p>Choose the date:</p>
+        <h3>Choose the date:</h3>
         <form asp-controller="budgets" asp-action="GetIncomesAndExpensesByDate" method="post" asp-route-budgetId="@Model.Budget.BudgetId">
-            <div class="form-control">
-                <label>Year</label>
-                <input type="text" asp-for="DateViewModel.Year" />
+        <div class="row">
+            <div class="form-group col-md-2">
+                <input class="form-control" type="text" asp-for="DateViewModel.Year" class="form-control" />
                 <span asp-validation-for="DateViewModel.Year" class="text-danger"></span>
             </div>
 
-            <div class="form-control">
-                <label>Month</label>
-                <div class="col-md-10">
-                    <select asp-for="DateViewModel.Month" asp-items="Html.GetEnumSelectList<Months>()"></select>
-                    <span asp-validation-for="DateViewModel.Month" class="text-danger"></span>
-                </div>
+            <div class="form-group col-md-4">
+                <select asp-for="DateViewModel.Month" asp-items="Html.GetEnumSelectList<Months>()" class="form-control"></select>
+                <span asp-validation-for="DateViewModel.Month" class="text-danger"></span>
             </div>
 
-            <div class="form-control">
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-        </form>
-        <div class="col">
         </div>
-    </div>
+    </form>
+
+    <br />
 
     <div class="row">
         <div class="col">

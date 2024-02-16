@@ -33,7 +33,12 @@ namespace BudgetTracker.Controllers
                 Budget = budget,
                 Expenses = context.Expenses.Where(x => x.BudgetId == id).ToList(),
                 Incomes = context.Incomes.Where(x => x.BudgetId == id).ToList(),
-                Categories = context.Categories.ToList()
+                Categories = context.Categories.ToList(),
+                DateViewModel = new()
+                {
+                    Year = DateTime.Today.Year,
+                    Month = (Months)DateTime.Today.Month
+                }
             };
 
             return View(viewModel);
@@ -41,11 +46,6 @@ namespace BudgetTracker.Controllers
 
         public ActionResult GetIncomesAndExpensesByDate(BudgetDetailsViewModel model, int budgetId)
         {
-           /* if (!ModelState.IsValid)
-            {
-                return View("Details", model);
-            }*/
-
             var budget = context.Budgets.FirstOrDefault(x => x.BudgetId == budgetId);
 
             if (budget == null) return NotFound();
