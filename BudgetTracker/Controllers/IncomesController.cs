@@ -21,7 +21,7 @@ namespace BudgetTracker.Controllers
             context.Incomes.Add(newIncome);
             context.SaveChanges();
 
-            return RedirectToAction("details", "budgets", new { id = viewModel.NewIncome.BudgetId });
+            return RedirectToAction("GetIncomesAndExpensesWithNewData", "Budgets", (new { newIncome.BudgetId, newIncome.Year, newIncome.Month }));
         }
 
         public IActionResult DeleteIncome(int id)

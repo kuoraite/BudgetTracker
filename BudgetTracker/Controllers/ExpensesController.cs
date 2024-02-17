@@ -20,7 +20,7 @@ namespace BudgetTracker.Controllers
             context.Expenses.Add(newExpense);
             context.SaveChanges();
 
-            return RedirectToAction("details", "budgets", new { id = viewModel.NewExpense.BudgetId });
+            return RedirectToAction("GetIncomesAndExpensesWithNewData", "Budgets", (new { newExpense.BudgetId, newExpense.Year, newExpense.Month }));
         }
 
         public IActionResult DeleteExpense(int id)

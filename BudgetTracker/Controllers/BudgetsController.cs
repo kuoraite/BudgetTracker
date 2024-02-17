@@ -41,6 +41,14 @@ namespace BudgetTracker.Controllers
             return View("Details", viewModel);
         }
 
+        public ActionResult GetIncomesAndExpensesWithNewData(int budgetId, int year, Months month)
+        {
+            var viewModel = GetBudgetDetailsViewModel(budgetId, year, month);
+            if (viewModel == null) return NotFound();
+
+            return View("Details", viewModel);
+        }
+
         private BudgetDetailsViewModel GetBudgetDetailsViewModel(int budgetId, int year, Months month)
         {
             var budget = GetBudgetById(budgetId);

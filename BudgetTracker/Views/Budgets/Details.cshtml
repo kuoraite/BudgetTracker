@@ -133,6 +133,8 @@
                             </select>
                         </td>
 
+                        <input type="hidden" asp-for="NewIncome.Year" value="@Model.DateViewModel.Year" class="text-danger" />
+                        <input type="hidden" asp-for="NewIncome.Month" value="@Model.DateViewModel.Month" class="text-danger" />
                         <input type="hidden" asp-for="NewIncome.BudgetId" value="@Model.Budget.BudgetId" />
 
                         <td>
@@ -247,6 +249,8 @@
                             </select>
                         </td>
 
+                        <input type="hidden" asp-for="NewExpense.Year" value="@Model.DateViewModel.Year" class="text-danger" />
+                        <input type="hidden" asp-for="NewExpense.Month" value="@Model.DateViewModel.Month" class="text-danger" />
                         <input type="hidden" asp-for="NewExpense.BudgetId" value="@Model.Budget.BudgetId" />
 
                         <td>
