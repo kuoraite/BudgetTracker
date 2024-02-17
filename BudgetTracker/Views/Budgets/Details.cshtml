@@ -260,7 +260,8 @@
     </div>
 </div> 
 
-<a class="btn btn-primary" asp-controller="graphs" asp-action="index" asp-route-id="@Model.Budget.BudgetId">Overview</a>
+<a class="btn btn-primary" asp-controller="graphs" asp-action="index" asp-route-budgetId="@Model.Budget.BudgetId" 
+asp-route-year="@Model.DateViewModel.Year" asp-route-month="@Model.DateViewModel.Month">Overview</a>
 
 @section Scripts {
     <script>

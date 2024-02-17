@@ -1,4 +1,6 @@
-﻿using BudgetTracker.Models;
+﻿using BudgetTracker.Enums;
+using BudgetTracker.Models;
+using BudgetTracker.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BudgetTracker.Controllers
@@ -11,12 +13,25 @@ namespace BudgetTracker.Controllers
         {
             this.context = context;
         }
-        public IActionResult Index()
+        public IActionResult Index(int budgetId, int year, Months month)
         {
-            return View();
+            var budget = context.Budgets.FirstOrDefault(x => x.BudgetId == budgetId);
+            if (budget == null) return NotFound();
+
+            BudgetDetailsViewModel detailsViewModel = new()
+            {
+                Budget = budget,
+                DateViewModel = new()
+                {
+                    Year = year,
+                    Month = month
+                }
+            }; 
+
+            return View(detailsViewModel);
         }
 
-        public IActionResult GetIncomesData(string itemType)
+        public IActionResult GetDoughnutChartData(string itemType, int budgetId, int year, string month)
         {
             var query = itemType == "Incomes" ? context.Incomes.Cast<ITransaction>() :
             itemType == "Expenses" ? context.Expenses.Cast<ITransaction>() :
@@ -25,6 +40,7 @@ namespace BudgetTracker.Controllers
             if (query == null) return NoContent();
 
             var categorySum = query
+                .Where(x => x.BudgetId == budgetId && x.Year == year && x.Month == (Months)Enum.Parse(typeof(Months), month, true))
                 .GroupBy(x => x.CategoryId)
                 .Select(group => new
                 {
