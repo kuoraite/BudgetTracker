@@ -24,42 +24,44 @@ namespace BudgetTracker.Controllers
         // GET: BudgetsController/Details/5
         public ActionResult Details(int id)
         {
-            var budget = context.Budgets.FirstOrDefault(x => x.BudgetId == id);
+            int year = DateTime.Today.Year;
+            Months month = (Months)DateTime.Today.Month;
 
-            if (budget == null) return NotFound();
-
-            BudgetDetailsViewModel viewModel = new()
-            {
-                Budget = budget,
-                Expenses = context.Expenses.Where(x => x.BudgetId == id).ToList(),
-                Incomes = context.Incomes.Where(x => x.BudgetId == id).ToList(),
-                Categories = context.Categories.ToList(),
-                DateViewModel = new()
-                {
-                    Year = DateTime.Today.Year,
-                    Month = (Months)DateTime.Today.Month
-                }
-            };
+            var viewModel = GetBudgetDetailsViewModel(id, year, month);
+            if(viewModel == null) return NotFound();            
 
             return View(viewModel);
         }
 
         public ActionResult GetIncomesAndExpensesByDate(BudgetDetailsViewModel model, int budgetId)
         {
-            var budget = context.Budgets.FirstOrDefault(x => x.BudgetId == budgetId);
-
-            if (budget == null) return NotFound();
-
-            BudgetDetailsViewModel viewModel = new()
-            {
-                Budget = budget,
-                Expenses = context.Expenses.Where(x => x.BudgetId == budget.BudgetId && x.Year == model.DateViewModel.Year && x.Month == model.DateViewModel.Month).ToList(),
-                Incomes = context.Incomes.Where(x => x.BudgetId == budget.BudgetId && x.Year == model.DateViewModel.Year && x.Month == model.DateViewModel.Month).ToList(),
-                Categories = context.Categories.ToList(),
-                DateViewModel = model.DateViewModel
-            };
+            var viewModel = GetBudgetDetailsViewModel(budgetId, model.DateViewModel.Year, model.DateViewModel.Month);
+            if (viewModel == null) return NotFound();
 
             return View("Details", viewModel);
+        }
+
+        private BudgetDetailsViewModel GetBudgetDetailsViewModel(int budgetId, int year, Months month)
+        {
+            var budget = GetBudgetById(budgetId);
+            if (budget == null) return null;
+
+            return new BudgetDetailsViewModel
+            {
+                Budget = budget,
+                Expenses = context.Expenses
+                    .Where(x => x.BudgetId == budgetId && x.Year == year && x.Month == month)
+                    .ToList(),
+                Incomes = context.Incomes
+                    .Where(x => x.BudgetId == budgetId && x.Year == year && x.Month == month)
+                    .ToList(),
+                Categories = context.Categories.ToList(),
+                DateViewModel = new()
+                {
+                    Year = year,
+                    Month = month
+                }
+            };
         }
 
         // GET: BudgetsController/Create
@@ -94,7 +96,7 @@ namespace BudgetTracker.Controllers
         {
             ViewBag.Action = "edit";
 
-            var budget = context.Budgets.FirstOrDefault(x => x.BudgetId == id);
+            var budget = GetBudgetById((int)id); 
             if (budget == null) return NotFound();
 
             return View(budget);
@@ -122,8 +124,7 @@ namespace BudgetTracker.Controllers
         // GET: BudgetsController/Delete/5
         public ActionResult Delete(int id)
         {
-            var budget = context.Budgets.Find(id);
-
+            var budget = GetBudgetById(id);
             if (budget == null) return NotFound();
 
             context.Budgets.Remove(budget);
@@ -147,6 +148,11 @@ namespace BudgetTracker.Controllers
             }
 
             return NotFound();
+        }
+
+        private Budget GetBudgetById(int id)
+        {
+            return context.Budgets.FirstOrDefault(x => x.BudgetId == id);
         }
     }
 }
