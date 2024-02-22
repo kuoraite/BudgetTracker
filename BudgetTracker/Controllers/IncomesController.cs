@@ -17,8 +17,14 @@ namespace BudgetTracker.Controllers
         public IActionResult CreateIncome(BudgetDetailsViewModel viewModel)
         {
             Income newIncome = viewModel.NewIncome;
+            var budget = context.Budgets.FirstOrDefault(x => x.BudgetId == newIncome.BudgetId);
+
+            if (budget == null) return NotFound();
+
+            budget.TotalAmount += newIncome.Amount;
 
             context.Incomes.Add(newIncome);
+            context.Budgets.Update(budget);
             context.SaveChanges();
 
             return RedirectToAction("GetIncomesAndExpensesWithNewData", "Budgets", (new { newIncome.BudgetId, newIncome.Year, newIncome.Month }));
@@ -30,12 +36,16 @@ namespace BudgetTracker.Controllers
 
             if (income == null) return NotFound();
 
-            var budgetId = income.BudgetId;
+            var budget = context.Budgets.FirstOrDefault(x => x.BudgetId == income.BudgetId);
+            if(budget == null) return NotFound();
+
+            budget.TotalAmount -= income.Amount;
 
             context.Remove(income);
+            context.Budgets.Update(budget);
             context.SaveChanges();
 
-            return RedirectToAction("details", "budgets", new { id = budgetId});
+            return RedirectToAction("details", "budgets", new { id = budget.BudgetId});
         }
 
         [HttpGet]
