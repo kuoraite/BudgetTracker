@@ -12,7 +12,6 @@ namespace BudgetTracker.Models
         public string? Description { get; set; }
         public decimal Amount { get; set; }
 
-        [RegularExpression(@"^202[0-9]$")]
         public int Year {  get; set; }
         public Months Month { get; set; }
 
