@@ -17,7 +17,13 @@ namespace BudgetTracker.Controllers
         {
             Expense newExpense = viewModel.NewExpense;
 
+            var budget = context.Budgets.FirstOrDefault(x => x.BudgetId == newExpense.BudgetId);
+            if (budget == null) return NotFound();
+
+            budget.TotalAmount -= newExpense.Amount;
+
             context.Expenses.Add(newExpense);
+            context.Budgets.Update(budget);
             context.SaveChanges();
 
             return RedirectToAction("GetIncomesAndExpensesWithNewData", "Budgets", (new { newExpense.BudgetId, newExpense.Year, newExpense.Month }));
@@ -26,15 +32,18 @@ namespace BudgetTracker.Controllers
         public IActionResult DeleteExpense(int id)
         {
             var expense = context.Expenses.FirstOrDefault(x => x.ExpenseId == id);
-
             if (expense == null) return NotFound();
 
-            var budgetId = expense.BudgetId;
+            var budget = context.Budgets.FirstOrDefault(x => x.BudgetId == expense.BudgetId);
+            if (budget == null) return NotFound();
+
+            budget.TotalAmount += expense.Amount;
 
             context.Remove(expense);
+            context.Budgets.Update(budget);
             context.SaveChanges();
 
-            return RedirectToAction("details", "budgets", new { id = budgetId });
+            return RedirectToAction("details", "budgets", new { id = budget.BudgetId });
         }
 
         [HttpGet]
