@@ -110,7 +110,7 @@
                             {
                                 <td></td>
                             }
-                            <td><a class="btn btn-primary" asp-controller="Incomes" asp-action="DeleteIncome" asp-route-id="@income.IncomeId" onclick="return confirmDelete('income')">Delete</a></td>
+                            <td><a class="btn btn-primary" asp-controller="Incomes" asp-action="DeleteIncome" asp-route-id="@income.IncomeId" asp-route-year="@Model.DateViewModel.Year" asp-route-month="@Model.DateViewModel.Month" onclick="return confirmDelete('income')">Delete</a></td>
                         </tr>
                     }
 
@@ -225,7 +225,7 @@
                             {
                                 <td></td>
                             }
-                            <td><a class="btn btn-primary" asp-controller="Expenses" asp-action="DeleteExpense" asp-route-id="@expense.ExpenseId" onclick="return confirmDelete('expense')">Delete</a></td>
+                            <td><a class="btn btn-primary" asp-controller="Expenses" asp-action="DeleteExpense" asp-route-id="@expense.ExpenseId" asp-route-year="@Model.DateViewModel.Year" asp-route-month="@Model.DateViewModel.Month" onclick="return confirmDelete('expense')">Delete</a></td>
                         </tr>
                     }
 

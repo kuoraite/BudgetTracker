@@ -1,4 +1,5 @@
-﻿using BudgetTracker.Models;
+﻿using BudgetTracker.Enums;
+using BudgetTracker.Models;
 using BudgetTracker.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +30,7 @@ namespace BudgetTracker.Controllers
             return RedirectToAction("GetIncomesAndExpensesWithNewData", "Budgets", (new { newExpense.BudgetId, newExpense.Year, newExpense.Month }));
         }
 
-        public IActionResult DeleteExpense(int id)
+        public IActionResult DeleteExpense(int id, int year, Months month)
         {
             var expense = context.Expenses.FirstOrDefault(x => x.ExpenseId == id);
             if (expense == null) return NotFound();
@@ -43,7 +44,7 @@ namespace BudgetTracker.Controllers
             context.Budgets.Update(budget);
             context.SaveChanges();
 
-            return RedirectToAction("details", "budgets", new { id = budget.BudgetId });
+            return RedirectToAction("GetIncomesAndExpensesWithNewData", "Budgets", new { budget.BudgetId, year, month });
         }
 
         [HttpGet]
