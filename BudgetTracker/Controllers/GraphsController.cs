@@ -2,6 +2,8 @@
 using BudgetTracker.Models;
 using BudgetTracker.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BudgetTracker.Controllers
 {
@@ -26,7 +28,7 @@ namespace BudgetTracker.Controllers
                     Year = year,
                     Month = month
                 }
-            }; 
+            };
 
             return View(detailsViewModel);
         }
@@ -68,6 +70,30 @@ namespace BudgetTracker.Controllers
             return Json(data);
         }
 
+        public IActionResult GetBarChartData(int budgetId, int year, string month)
+        {
+            var (incomeAmounts, incomeLabels) = GetAmounts(context.Incomes, budgetId, year, (Months)Enum.Parse(typeof(Months), month, true));
+            var (expenseAmounts, expenseLabels) = GetAmounts(context.Expenses, budgetId, year, (Months)Enum.Parse(typeof(Months), month, true));
+
+
+            if (!incomeLabels.SequenceEqual(expenseLabels))
+            {
+                return BadRequest();
+            }
+            
+            var labels = incomeLabels;
+
+            var data = new
+            {
+                IncomeAmounts = incomeAmounts,
+                ExpenseAmounts = expenseAmounts,
+                Labels = labels,
+                Colors = GenerateRandomColors(2)
+            };
+
+            return Json(data);
+        }
+
         private static List<string> GenerateRandomColors(int count)
         {
             var random = new Random();
@@ -80,6 +106,35 @@ namespace BudgetTracker.Controllers
             }
 
             return colors;
+        }
+
+        private (List<decimal>, List<string>) GetAmounts(IQueryable<ITransaction> transactions, int budgetId, int year, Months targetMonth)
+        {
+            var amounts = new List<decimal>();
+            var labels = new List<string>();
+
+            for (int i = 0; i < 6; i++)
+            {
+                var amountsForCurrentMonth = transactions
+                    .Where(x => x.BudgetId == budgetId && x.Year == year && x.Month == targetMonth)
+                    .Select(x => x.Amount)
+                    .Sum();
+
+                amounts.Add(amountsForCurrentMonth);
+                labels.Add(targetMonth.ToString());
+
+                if (targetMonth == Months.January)
+                {
+                    targetMonth = Months.December;
+                    year--;
+                }
+                else
+                {
+                    targetMonth = (Months)(int)targetMonth - 1;
+                }
+            }
+
+            return (amounts, labels);
         }
     }
 }

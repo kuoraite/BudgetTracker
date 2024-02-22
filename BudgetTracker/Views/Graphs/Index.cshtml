@@ -10,15 +10,29 @@
 <br />
 
 <div class="container">
-    <div class="row">
+    <div class="row">        
         <div class="col">
-            <h4>Incomes by category</h4>
-            <canvas id="incomesChart"></canvas>
+            <h4>Graphs by category</h4>
+            <p> Overview of incomes and expenses in the year @Model.DateViewModel.Year for the month of @Model.DateViewModel.Month.</p>
+            <div class="container">
+            <div class="row">
+                <div class="col-5">
+                    <h5>Incomes by category</h5>
+                    <canvas id="incomesChart"></canvas>
+                </div>
+
+                <div class="col-5">
+                    <h5>Expenses by category</h5>
+                    <canvas id="expensesChart"></canvas>
+                </div>
+            </div>
+            </div>
         </div>
 
-        <div class="col">
-            <h4>Expenses by category</h4>
-            <canvas id="expensesChart"></canvas>
+        <div class="col-6">
+            <h4>Comparison</h4>
+            <p>The comparison of your incomes and expenses in the last 6 months</p>
+            <canvas id="incomeExpenseComparisonChart"></canvas>
         </div>
     </div>
 </div>
@@ -29,6 +43,7 @@
 <script>
     const incomeCtx = document.getElementById("incomesChart");
     const expenseCtx = document.getElementById("expensesChart");
+    const comparisonCtx = document.getElementById("incomeExpenseComparisonChart");
         
     $(document).ready(function () {
         $.ajax({
@@ -67,7 +82,20 @@
                     }
                 });
             }
-        });        
+        });  
+        
+        $.ajax({
+            type: "POST",
+            url: "/Graphs/GetBarChartData",
+            data: {
+                budgetId: @Model.Budget.BudgetId,
+                year: @Model.DateViewModel.Year,
+                month: "@Model.DateViewModel.Month"
+            },
+            success: function (comparisonData) {
+                renderComparisonChart(comparisonCtx, comparisonData);
+            }
+        });
 
         function renderDoughnutChart(ctx, data) {
             var _chartLabels = data.categoryNames;
@@ -87,6 +115,47 @@
                 },
                 options: {
                     responsive: true, 
+                    plugins: {
+                        legend: {
+                            position: "top",
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderComparisonChart(ctx, data) {
+            const monthLabels = data.labels;
+            console.log(data.labels);
+
+            const datasets = [{
+                label: "Income",
+                data: data.incomeAmounts,
+                backgroundColor: data.colors[1],
+                borderWidth: 1
+            },
+            {
+                label: "Expense",
+                data: data.expenseAmounts,
+                backgroundColor: data.colors[2],
+                borderWidth: 1
+            }];
+
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: monthLabels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    indexAxis: "x",
+                    scales: {
+                        y: {
+                            stacked: false,
+                            beginAtZero: true
+                        }
+                    },
                     plugins: {
                         legend: {
                             position: "top",
