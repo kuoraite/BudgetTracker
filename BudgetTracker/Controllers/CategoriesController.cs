@@ -1,7 +1,5 @@
 ﻿using BudgetTracker.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BudgetTracker.Controllers
 {
@@ -77,10 +75,26 @@ namespace BudgetTracker.Controllers
 
             if(category == null ) return NotFound();
 
+            UpdateRelatedTransactions(context.Incomes, id);
+            UpdateRelatedTransactions(context.Expenses, id);
+            context.SaveChanges();
+
             context.Categories.Remove(category);
             context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private static void UpdateRelatedTransactions(IQueryable<ITransaction> transactions, int categoryId)
+        {
+            var transactionsToUpdate = transactions.Where(x => x.CategoryId == categoryId);
+            if (transactionsToUpdate != null)
+            {
+                foreach (var transaction in transactionsToUpdate)
+                {
+                    transaction.CategoryId = null;
+                }
+            }
         }
     }
 }
