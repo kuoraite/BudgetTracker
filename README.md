@@ -3,12 +3,20 @@ This is a practice project utilizing C#, ASP.NET Core MVC, and Entity Framework 
 
 ## Features (Planned/Implemented)
 - Expense Tracking:
-Log and categorize expenses to gain insights into spending habits.
+Log and categorize expenses to gain insights into spending habits. Expenses can be:
+  + Created with or without an existing category, along with a chosen year and month.
+  + Deleted.
+  + Given a description.
 - Income Management:
-Record various sources of income to maintain a comprehensive financial overview.
+Record various sources of income to maintain a comprehensive financial overview. Incomes can be:
+  + Created with or without an existing category, along with a chosen year and month.
+  + Deleted.
+  + Given a description.
 - Budget Creation and Monitoring:
-Create budgets for specific categories and track expenditures against them.
-- Data Visualization (Planned):
-Utilize charts or graphs to visually represent budget trends and patterns.
+Create, delete, or change budgets and track transactions inside them.
+- Data Visualization:
+Utilize charts or graphs to visually represent budget trends and patterns:
+  + Dougnut charts to view transactions grouped by categories for a specific month.
+  + Bar chart to compare incomes and expenses in the last 6 months.
 - User Authentication (Planned):
 Implement user authentication to secure personal budget data.
