@@ -44,32 +44,9 @@
                     </tr>
 
                     <form method="post" asp-controller="incomes" asp-action="CreateIncome" class="custom-form">
-                    <tr>
-                        <td>
-                            <input type="text" asp-for="NewIncome.Name" />
-                        </td>
-                        <td class="col-2">
-                            <input type="number" step="0.01" asp-for="NewIncome.Amount" style="width: 100px;" />
-                        </td>
-                        <td>
-                            <select class="form-select" asp-for="NewIncome.CategoryId" aria-label="Default select example" style="width: 170px;">
-                                <option value="" selected>Choose a category</option>
-                                @foreach (Category category in Model.Categories)
-                                {
-                                    <option value="@category.CategoryId">@category.Name</option>
-                                }
-                            </select>
-                        </td>
-
-                        <input type="hidden" asp-for="NewIncome.Year" value="@Model.DateViewModel.Year" class="text-danger" />
-                        <input type="hidden" asp-for="NewIncome.Month" value="@Model.DateViewModel.Month" class="text-danger" />
-                        <input type="hidden" asp-for="NewIncome.BudgetId" value="@Model.Budget.BudgetId" />
-
-                        <td>
-                            <input type="submit" class="btn btn-primary" value="save" />
-                        </td>
-                    </tr>
-                </form>
+                        <partial name="_TransactionForm"
+                                 model="@new BudgetDetailsViewModel { Budget = Model.Budget, DateViewModel = Model.DateViewModel, Categories = Model.Categories, IsIncome = true}" />
+                    </form>
                 </table>
             }
             else
@@ -81,65 +58,13 @@
                         <th>Category</th>
                         <th></th>
                     </tr>
-                    @foreach (Income income in Model.Incomes)
-                    {
-                        <tr>
-                            @if (income.Description != null)
-                            {
-                                <td>
-                                    @income.Name
-                                    <a class="btn view-description-btn income-btn" data-toggle="modal" data-target="#detailsModal" data-transaction-id="@income.IncomeId">
-                                        <i class="fas fa-eye">i</i>
-                                    </a>
 
-                                    <input type="hidden" class="description-data" value="@income.Description" />
-
-                                    <partial name="_ReadModal" />
-                                </td>
-                            }
-                            else
-                            {
-                                <td>@income.Name </td>
-                            }
-                            <td>@income.Amount</td>
-                            @if (income.CategoryId != null)
-                            {
-                                <td>@Model.Categories.FirstOrDefault(x => x.CategoryId == income.CategoryId).Name</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            <td><a class="btn btn-primary" asp-controller="Incomes" asp-action="DeleteIncome" asp-route-id="@income.IncomeId" asp-route-year="@Model.DateViewModel.Year" asp-route-month="@Model.DateViewModel.Month" onclick="return confirmDelete('income')">Delete</a></td>
-                        </tr>
-                    }
+                    <partial name="_TransactionTable" model="@new BudgetDetailsViewModel{Incomes = Model.Incomes, Categories = Model.Categories, DateViewModel = Model.DateViewModel, IsIncome = true}" />
+                    
 
                     <form method="post" asp-controller="incomes" asp-action="CreateIncome" class="custom-form">
-                    <tr>
-                        <td>
-                            <input type="text" asp-for="NewIncome.Name" />
-                        </td>
-                        <td class="col-2">
-                            <input type="number" step="0.01" asp-for="NewIncome.Amount" style="width: 100px;" />
-                        </td>
-                        <td>
-                            <select class="form-select" asp-for="NewIncome.CategoryId" aria-label="Default select example" style="width: 170px;">
-                                <option value="" selected>Choose a category</option>
-                                    @foreach (Category category in Model.Categories)
-                                    {
-                                    <option value="@category.CategoryId">@category.Name</option>
-                                    }
-                            </select>
-                        </td>
-
-                        <input type="hidden" asp-for="NewIncome.Year" value="@Model.DateViewModel.Year" class="text-danger" />
-                        <input type="hidden" asp-for="NewIncome.Month" value="@Model.DateViewModel.Month" class="text-danger" />
-                        <input type="hidden" asp-for="NewIncome.BudgetId" value="@Model.Budget.BudgetId" />
-
-                        <td>
-                            <input type="submit" class="btn btn-primary" value="save" />
-                        </td>
-                    </tr>
+                        <partial name="_TransactionForm" 
+                            model="@new BudgetDetailsViewModel { Budget = Model.Budget, DateViewModel = Model.DateViewModel, Categories = Model.Categories, IsIncome = true}" />
                     </form>
                 </table>
             }            
@@ -158,34 +83,11 @@
                         <th>Category</th>
                         <th></th>
                     </tr>
-                <form method="post" asp-controller="expenses" asp-action="CreateExpense">
-                    <tr>
-                        <td>
-                            <input type="text" asp-for="NewExpense.Name" />
-                        </td>
-                        <td>
-                            <input type="number" step="0.01" asp-for="NewExpense.Amount" style="width: 100px;" />
-                        </td>
 
-                        <td>
-                            <select class="form-select" asp-for="NewExpense.CategoryId" aria-label="Default select example">
-                                <option value="" selected>Choose a category</option>
-                                @foreach (Category category in Model.Categories)
-                                {
-                                    <option value="@category.CategoryId">@category.Name</option>
-                                }
-                            </select>
-                        </td>
-
-                        <input type="hidden" asp-for="NewExpense.Year" value="@Model.DateViewModel.Year" class="text-danger" />
-                        <input type="hidden" asp-for="NewExpense.Month" value="@Model.DateViewModel.Month" class="text-danger" />
-                        <input type="hidden" asp-for="NewExpense.BudgetId" value="@Model.Budget.BudgetId" />
-
-                        <td>
-                            <input type="submit" class="btn btn-primary" value="save" />
-                        </td>
-                    </tr>
-                </form>
+                    <form method="post" asp-controller="expenses" asp-action="CreateExpense" class="custom-form">
+                        <partial name="_TransactionForm"
+                                 model="@new BudgetDetailsViewModel { Budget = Model.Budget, DateViewModel = Model.DateViewModel, Categories = Model.Categories, IsIncome = false}" />
+                    </form>
                 </table>
             }
         else{
@@ -196,66 +98,12 @@
                         <th>Category</th>
                         <th></th>
                     </tr>
-                    @foreach (Expense expense in Model.Expenses)
-                    {
-                        <tr>
-                            @if (expense.Description != null)
-                            {
-                                <td>
-                                    @expense.Name
-                                    <a class="btn view-description-btn expense-btn" data-toggle="modal" data-target="#detailsModal" data-transaction-id="@expense.ExpenseId">
-                                        <i class="fas fa-eye">i</i>
-                                    </a>
 
-                                    <input type="hidden" class="description-data" value="@expense.Description" />
+                    <partial name="_TransactionTable" model="@new BudgetDetailsViewModel{Expenses = Model.Expenses, Categories = Model.Categories, DateViewModel = Model.DateViewModel, IsIncome = false}" />
 
-                                    <partial name="_ReadModal" />
-                                </td>
-                            }
-                            else
-                            {
-                                <td>@expense.Name </td>
-                            }
-                            <td>@expense.Amount</td>
-                            @if (expense.CategoryId != null)
-                            {
-                                <td>@Model.Categories.FirstOrDefault(x => x.CategoryId == expense.CategoryId).Name</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            <td><a class="btn btn-primary" asp-controller="Expenses" asp-action="DeleteExpense" asp-route-id="@expense.ExpenseId" asp-route-year="@Model.DateViewModel.Year" asp-route-month="@Model.DateViewModel.Month" onclick="return confirmDelete('expense')">Delete</a></td>
-                        </tr>
-                    }
-
-                    <form method="post" asp-controller="expenses" asp-action="CreateExpense">
-                    <tr>
-                        <td>
-                            <input type="text" asp-for="NewExpense.Name" />
-                        </td>
-                        <td>
-                            <input type="number" step="0.01" asp-for="NewExpense.Amount" style="width: 100px;" />
-                        </td>
-
-                        <td>
-                            <select class="form-select" asp-for="NewExpense.CategoryId" aria-label="Default select example">
-                                <option value="" selected>Choose a category</option>
-                                    @foreach (Category category in Model.Categories)
-                                    {
-                                    <option value="@category.CategoryId">@category.Name</option>
-                                    }
-                            </select>
-                        </td>
-
-                        <input type="hidden" asp-for="NewExpense.Year" value="@Model.DateViewModel.Year" class="text-danger" />
-                        <input type="hidden" asp-for="NewExpense.Month" value="@Model.DateViewModel.Month" class="text-danger" />
-                        <input type="hidden" asp-for="NewExpense.BudgetId" value="@Model.Budget.BudgetId" />
-
-                        <td>
-                            <input type="submit" class="btn btn-primary" value="save" />
-                        </td>
-                    </tr>
+                    <form method="post" asp-controller="expenses" asp-action="CreateExpense" class="custom-form">
+                        <partial name="_TransactionForm"
+                                 model="@new BudgetDetailsViewModel { Budget = Model.Budget, DateViewModel = Model.DateViewModel, Categories = Model.Categories, IsIncome = false}" />
                     </form>
                 </table>
         }
@@ -265,29 +113,3 @@
 
 <a class="btn btn-primary" asp-controller="graphs" asp-action="index" asp-route-budgetId="@Model.Budget.BudgetId" 
 asp-route-year="@Model.DateViewModel.Year" asp-route-month="@Model.DateViewModel.Month">Overview</a>
-
-@section Scripts {
-    <script>
-        function confirmDelete(budgetType) {
-            return confirm("Are you sure you want to delete this " + budgetType + "?")
-        }
-
-        $(document).ready(function () {
-            $('.view-description-btn').on('click', function () {
-                var description = $(this).siblings('.description-data').val();
-                var name = $(this).closest('td').contents().filter(function () {
-                    return this.nodeType === 3;
-                }).text().trim();
-
-                var transactionId = $(this).data('transaction-id');
-                var isIncome = $(this).hasClass('income-btn');
-
-                $('#transactionIdInput').val(transactionId);
-                $('#budgetItemType').val(isIncome ? 'Income' : 'Expense');
-
-                $('#nameContent').text("Name: " + name);
-                $('#descriptionContent').html("<strong>Description: </strong>" + description);
-            });
-        });
-    </script>
-}

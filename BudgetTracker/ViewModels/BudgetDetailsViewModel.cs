@@ -13,5 +13,7 @@ namespace BudgetTracker.ViewModels
         public Expense NewExpense {  get; set; }
 
         public DateViewModel DateViewModel { get; set; } = new DateViewModel();
+
+        public bool IsIncome { get; set; }
     }
 }
